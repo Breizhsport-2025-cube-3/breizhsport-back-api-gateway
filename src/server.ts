@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import cors from "cors"; // Importez le package cors
 import dotenv from "dotenv";
 
 // Charger les variables d'environnement
@@ -7,6 +8,12 @@ dotenv.config();
 const createExpressServer = () => {
 const app = express();
 const PORT = 3000;
+
+  // Activer CORS
+  app.use(cors({
+    origin: 'http://localhost:4200', // Autoriser uniquement le frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Méthodes autorisées
+  }));
 
 // Middleware pour parser les JSON
 app.use(express.json());
@@ -20,7 +27,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use(
   "/categories",
   createProxyMiddleware({
-    target: process.env.CATEGORIES_SERVICE_URL || "http://localhost:4001",
+    target: process.env.CATEGORIES_SERVICE_URL,
     changeOrigin: true,
   })
 );
@@ -29,7 +36,7 @@ app.use(
 app.use(
   "/products",
   createProxyMiddleware({
-    target: process.env.PRODUCT_SERVICE_URL || "http://localhost:4002",
+    target: process.env.PRODUCT_SERVICE_URL,
     changeOrigin: true,
   })
 );
@@ -38,7 +45,7 @@ app.use(
 app.use(
   "/cart",
   createProxyMiddleware({
-    target: process.env.CART_SERVICE_URL || "http://localhost:4003",
+    target: process.env.CART_SERVICE_URL,
     changeOrigin: true,
   })
 );
@@ -47,7 +54,7 @@ app.use(
 app.use(
   "/orders",
   createProxyMiddleware({
-    target: process.env.ORDERS_SERVICE_URL || "http://localhost:4004",
+    target: process.env.ORDERS_SERVICE_URL,
     changeOrigin: true,
   })
 );
