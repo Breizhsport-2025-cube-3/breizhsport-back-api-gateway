@@ -1,0 +1,37 @@
+{
+  "name": "breizhsport-back-api-gateway",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Breizhsport-2025-cube-3/breizhsport-back-api-gateway.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Breizhsport-2025-cube-3/breizhsport-back-api-gateway/issues"
+  },
+  "homepage": "https://github.com/Breizhsport-2025-cube-3/breizhsport-back-api-gateway#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "http-proxy-middleware": "^3.0.3",
+    "morgan": "^1.10.0",
+    "permissions-policy": "^0.6.0",
+    "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.10",
+    "nodemon": "^3.1.9"
+  }
+}
