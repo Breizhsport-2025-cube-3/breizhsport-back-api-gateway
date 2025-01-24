@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const createExpressServer = () => {
 const app = express();
-const PORT = process.env.PORT;
+const PORT = 3000;
 
 // Middleware pour parser les JSON
 app.use(express.json());
@@ -51,11 +51,6 @@ app.use(
     changeOrigin: true,
   })
 );
-
-// Lancer le serveur
-app.listen(PORT, () => {
-  console.log(`API Gateway running on http://localhost:${PORT}`);
-});
 
 return app;
 };
