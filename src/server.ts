@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const createExpressServer = () => {
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // Middleware pour parser les JSON
 app.use(express.json());
