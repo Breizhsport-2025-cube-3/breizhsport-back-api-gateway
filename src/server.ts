@@ -45,13 +45,13 @@ app.use(
 app.use(
   "/cart",
   createProxyMiddleware({
-    target: process.env.CART_SERVICE_URL, // http://localhost:4003/cart
+    target: process.env.CART_SERVICE_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/cart": "", // Supprime le préfixe /cart ajouté par la gateway
-    },
   })
 );
+
+
+
 
 
 // Proxy vers le service Commandes
