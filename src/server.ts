@@ -13,16 +13,13 @@ const createExpressServer = (): Application => {
   app.use(cors({ origin: "http://localhost:4200", methods: ["GET", "POST", "PUT", "DELETE"] }));
   app.use(express.json());
 
-  // Vérification de l'état de l'API Gateway
   app.get("/", (req: Request, res: Response) => {
     res.send("API Gateway en ligne");
   });
 
-  // Liste des services à proxifier
   const services = [
     { route: "/categories", target: process.env.CATEGORIES_SERVICE_URL },
     { route: "/products", target: process.env.PRODUCT_SERVICE_URL },
-    { route: "/orders", target: process.env.ORDERS_SERVICE_URL },
   ];
 
   services.forEach(({ route, target }) => {
@@ -31,7 +28,7 @@ const createExpressServer = (): Application => {
     }
   });
 
-  // Proxy vers le service Panier (Cart)
+  // Proxy pour le service Panier
   app.use(
     "/cart",
     createProxyMiddleware({
@@ -39,15 +36,20 @@ const createExpressServer = (): Application => {
       changeOrigin: true,
       pathRewrite: { "^/cart": "/cart" },
       onProxyReq: (proxyReq, req) => {
-        if (req.method === "POST" && req.body) {
+        if ((req.method === "POST" || req.method === "PUT" || req.method === "DELETE") && req.body) {
           const bodyData = JSON.stringify(req.body);
           proxyReq.setHeader("Content-Type", "application/json");
           proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
           proxyReq.write(bodyData);
         }
       },
+      onError: (err, req, res) => {
+        console.error(`[API Gateway] ❌ Erreur proxy /cart : ${err.message}`);
+        res.status(502).json({ message: "Erreur de proxy, impossible de joindre le microservice Cart." });
+      },
     })
   );
+  
 
   return app;
 };
