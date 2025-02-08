@@ -1,0 +1,45 @@
+name: API Gateway Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-api-gateway:
+    runs-on: ubuntu-22.04
+    steps:
+      # Étape 1 : Checkout du code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Étape 2 : Configuration de Node.js (si nécessaire pour ton API Gateway)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      # Étape 3 : Nettoyer les anciens fichiers node_modules et package-lock.json
+      - name: Clean Node Modules
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+
+      # Étape 4 : Installer les dépendances nécessaires
+      - name: Install Dependencies
+        run: npm install
+
+      # Étape 5 : Construire l'API Gateway
+      - name: Build API Gateway
+        run: npm run build
+
+  publish-on-docker:
+    needs: [build-api-gateway]
+    uses: Breizhsport-2025-cube-3/breizhsport-infra/.github/workflows/publish_on_docker.yml@main
+    secrets:
+      tags: ${{ secrets.DOCKER_USERNAME }}/breizhsport-api-gateway:develop
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PAT: ${{ secrets.DOCKER_PAT }}
