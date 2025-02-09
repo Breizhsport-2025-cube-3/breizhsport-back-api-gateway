@@ -34,7 +34,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Étape 5 : Construire l'API Gateway
+      # Étape 5 : Construire l'API Gateway.
       - name: Build API Gateway
         run: npm run build
 
