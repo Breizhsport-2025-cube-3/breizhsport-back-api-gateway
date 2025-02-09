@@ -32,7 +32,8 @@ jobs:
 
       # Étape 4 : Installer les dépendances nécessaires.
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+
 
       # Étape 5 : Construire l'API Gateway.
       - name: Build API Gateway
