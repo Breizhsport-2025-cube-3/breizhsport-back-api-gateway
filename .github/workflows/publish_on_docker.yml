@@ -30,7 +30,7 @@ jobs:
           rm -rf node_modules
           rm -f package-lock.json
 
-      # Étape 4 : Installer les dépendances nécessaires
+      # Étape 4 : Installer les dépendances nécessaires.
       - name: Install Dependencies
         run: npm install
 
