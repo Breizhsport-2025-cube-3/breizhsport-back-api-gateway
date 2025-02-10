@@ -5,7 +5,7 @@ import permissionsPolicy from "permissions-policy";
 const sequelize = require('./config/database'); 
 
 const app = createExpressServer();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 // Ajoutez Helmet pour les autres en-têtes de sécurité
 app.use(helmet());
