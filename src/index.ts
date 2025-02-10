@@ -5,7 +5,7 @@ import permissionsPolicy from "permissions-policy";
 const sequelize = require('./config/database'); 
 
 const app = createExpressServer();
-const port = process.env.PORT || 3000;
+const port = parseInt(process.env.PORT || '3000', 10);
 
 // Ajoutez Helmet pour les autres en-têtes de sécurité
 app.use(helmet());
@@ -51,9 +51,10 @@ app.use((req, res, next) => {
 sequelize.sync({ alter: true })
   .then(() => {
     console.log('Base de données synchronisée');
-    app.listen(port, () => {
-      console.log(`Serveur démarré sur http://localhost:${port}`);
+    app.listen(port, '0.0.0.0', () => {
+      console.log(`Serveur démarré sur http://0.0.0.0:${port}`);
     });
+    
   })
   .catch((err: any) => {
     console.error('Erreur lors de la synchronisation de la base de données :', err);
