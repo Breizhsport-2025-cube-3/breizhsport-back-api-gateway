@@ -9,14 +9,14 @@ WORKDIR /usr/src/app
 # Étape 3 : Copier les fichiers package.json et package-lock.json pour installer les dépendances
 COPY package*.json ./
 
-# Étape 4 : Installer les dépendances (production uniquement)
-RUN npm install --omit=dev
+# Étape 4 : Installer toutes les dépendances (y compris les devDependencies pour nodemon)
+RUN npm install
 
 # Étape 5 : Copier le reste des fichiers source dans le conteneur
 COPY . .
 
-# Étape 6 : Exposer le port sur lequel ton API Gateway fonctionne (modifie si besoin)
+# Étape 6 : Exposer le port sur lequel ton API Gateway fonctionne
 EXPOSE 3000
 
-# Étape 7 : Lancer l'application en mode développement
+# Étape 7 : Lancer l'application en mode développement avec nodemon
 CMD ["npm", "run", "dev"]
