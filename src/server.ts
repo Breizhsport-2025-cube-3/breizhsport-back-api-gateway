@@ -28,7 +28,7 @@ const createExpressServer = (): Application => {
     }
   });
 
-  // Proxy pour le service Panier
+  // Proxy pour le service Panier.
   app.use(
     "/cart",
     createProxyMiddleware({
