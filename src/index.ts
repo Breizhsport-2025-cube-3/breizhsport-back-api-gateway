@@ -51,8 +51,8 @@ app.use((req, res, next) => {
 sequelize.sync({ alter: true })
   .then(() => {
     console.log('Base de données synchronisée');
-    app.listen(port, '0.0.0.0', () => {
-      console.log(`Serveur démarré sur http://0.0.0.0:${port}`);
+    app.listen(port, () => {
+      console.log(`Serveur démarré sur http://localhost:${port}`);
     });
     
   })
