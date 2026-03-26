@@ -10,7 +10,12 @@ const PORT = process.env.PORT || 3000;
 const createExpressServer = (): Application => {
   const app: Application = express();
 
-  app.use(cors({ origin: "http://localhost:4200", methods: ["GET", "POST", "PUT", "DELETE"] }));
+  app.use(
+    cors({
+      origin: "http://localhost:4200",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+    })
+  );
   app.use(express.json());
 
   app.get("/", (req: Request, res: Response) => {
@@ -20,6 +25,7 @@ const createExpressServer = (): Application => {
   const services = [
     { route: "/categories", target: process.env.CATEGORIES_SERVICE_URL },
     { route: "/products", target: process.env.PRODUCT_SERVICE_URL },
+    { route: "/auth", target: process.env.AUTH_SERVICE_URL },
   ];
 
   services.forEach(({ route, target }) => {
@@ -28,7 +34,6 @@ const createExpressServer = (): Application => {
     }
   });
 
-  // Proxy pour le service Panier.
   app.use(
     "/cart",
     createProxyMiddleware({
@@ -36,20 +41,28 @@ const createExpressServer = (): Application => {
       changeOrigin: true,
       pathRewrite: { "^/cart": "/cart" },
       onProxyReq: (proxyReq, req) => {
-        if ((req.method === "POST" || req.method === "PUT" || req.method === "DELETE") && req.body) {
+        if (
+          (req.method === "POST" ||
+            req.method === "PUT" ||
+            req.method === "DELETE") &&
+          req.body
+        ) {
           const bodyData = JSON.stringify(req.body);
           proxyReq.setHeader("Content-Type", "application/json");
           proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
           proxyReq.write(bodyData);
         }
       },
-      onError: (err, req, res) => {
+      onError: (err, req, res: any) => {
         console.error(`[API Gateway] ❌ Erreur proxy /cart : ${err.message}`);
-        res.status(502).json({ message: "Erreur de proxy, impossible de joindre le microservice Cart." });
+        res
+          .status(502)
+          .json({
+            message: "Erreur de proxy, impossible de joindre le microservice Cart.",
+          });
       },
     })
   );
-  
 
   return app;
 };
