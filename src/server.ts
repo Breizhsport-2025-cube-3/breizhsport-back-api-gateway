@@ -25,7 +25,6 @@ const createExpressServer = (): Application => {
   const services = [
     { route: "/categories", target: process.env.CATEGORIES_SERVICE_URL },
     { route: "/products", target: process.env.PRODUCT_SERVICE_URL },
-    { route: "/auth", target: process.env.AUTH_SERVICE_URL },
   ];
 
   services.forEach(({ route, target }) => {
@@ -33,6 +32,21 @@ const createExpressServer = (): Application => {
       app.use(route, createProxyMiddleware({ target, changeOrigin: true }));
     }
   });
+
+  app.use(
+    "/auth",
+    createProxyMiddleware({
+      target: process.env.AUTH_SERVICE_URL,
+      changeOrigin: true,
+      pathRewrite: { "^/auth": "" },
+      onError: (err, req, res: any) => {
+        console.error(`[API Gateway] ❌ Erreur proxy /auth : ${err.message}`);
+        res
+          .status(502)
+          .json({ message: "Erreur de proxy, impossible de joindre le microservice Auth." });
+      },
+    })
+  );
 
   app.use(
     "/cart",
@@ -57,9 +71,7 @@ const createExpressServer = (): Application => {
         console.error(`[API Gateway] ❌ Erreur proxy /cart : ${err.message}`);
         res
           .status(502)
-          .json({
-            message: "Erreur de proxy, impossible de joindre le microservice Cart.",
-          });
+          .json({ message: "Erreur de proxy, impossible de joindre le microservice Cart." });
       },
     })
   );
