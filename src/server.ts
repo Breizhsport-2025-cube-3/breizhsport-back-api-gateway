@@ -14,7 +14,7 @@ const createExpressServer = (): Application => {
     cors({
       origin: "http://localhost:4200",
       methods: ["GET", "POST", "PUT", "DELETE"],
-    })
+    }),
   );
   app.use(express.json());
 
@@ -41,11 +41,12 @@ const createExpressServer = (): Application => {
       pathRewrite: { "^/auth": "" },
       onError: (err, req, res: any) => {
         console.error(`[API Gateway] ❌ Erreur proxy /auth : ${err.message}`);
-        res
-          .status(502)
-          .json({ message: "Erreur de proxy, impossible de joindre le microservice Auth." });
+        res.status(502).json({
+          message:
+            "Erreur de proxy, impossible de joindre le microservice Auth.",
+        });
       },
-    })
+    }),
   );
 
   app.use(
@@ -69,11 +70,12 @@ const createExpressServer = (): Application => {
       },
       onError: (err, req, res: any) => {
         console.error(`[API Gateway] ❌ Erreur proxy /cart : ${err.message}`);
-        res
-          .status(502)
-          .json({ message: "Erreur de proxy, impossible de joindre le microservice Cart." });
+        res.status(502).json({
+          message:
+            "Erreur de proxy, impossible de joindre le microservice Cart.",
+        });
       },
-    })
+    }),
   );
 
   return app;
